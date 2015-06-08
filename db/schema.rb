@@ -13,13 +13,16 @@
 
 ActiveRecord::Schema.define(version: 20141204151558) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "collection_members", force: :cascade do |t|
     t.integer "collection_id"
     t.integer "target_id"
     t.string  "type"
   end
 
-  add_index "collection_members", ["collection_id", "target_id", "type"], name: "ix_collections_fk_type"
+  add_index "collection_members", ["collection_id", "target_id", "type"], name: "ix_collections_fk_type", using: :btree
 
   create_table "concept_relations", force: :cascade do |t|
     t.string   "type"
@@ -30,7 +33,7 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.integer  "rank",       default: 100
   end
 
-  add_index "concept_relations", ["owner_id", "target_id"], name: "ix_concept_relations_fk"
+  add_index "concept_relations", ["owner_id", "target_id"], name: "ix_concept_relations_fk", using: :btree
 
   create_table "concepts", force: :cascade do |t|
     t.string   "type"
@@ -48,8 +51,8 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.boolean  "top_term",                          default: false
   end
 
-  add_index "concepts", ["origin"], name: "ix_concepts_on_origin"
-  add_index "concepts", ["published_version_id"], name: "ix_concepts_publ_version_id"
+  add_index "concepts", ["origin"], name: "ix_concepts_on_origin", using: :btree
+  add_index "concepts", ["published_version_id"], name: "ix_concepts_publ_version_id", using: :btree
 
   create_table "configuration_settings", force: :cascade do |t|
     t.string "key"
@@ -70,7 +73,7 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.datetime "updated_at"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "exports", force: :cascade do |t|
     t.integer  "user_id"
@@ -84,7 +87,7 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.string   "default_namespace"
   end
 
-  add_index "exports", ["user_id"], name: "index_exports_on_user_id"
+  add_index "exports", ["user_id"], name: "index_exports_on_user_id", using: :btree
 
   create_table "imports", force: :cascade do |t|
     t.integer  "user_id"
@@ -98,7 +101,7 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.string   "default_namespace"
   end
 
-  add_index "imports", ["user_id"], name: "index_imports_on_user_id"
+  add_index "imports", ["user_id"], name: "index_imports_on_user_id", using: :btree
 
   create_table "job_relations", force: :cascade do |t|
     t.string   "type"
@@ -117,8 +120,8 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.datetime "updated_at"
   end
 
-  add_index "labelings", ["owner_id", "target_id", "type"], name: "ix_labelings_fk_type"
-  add_index "labelings", ["type"], name: "ix_labelings_on_type"
+  add_index "labelings", ["owner_id", "target_id", "type"], name: "ix_labelings_fk_type", using: :btree
+  add_index "labelings", ["type"], name: "ix_labelings_on_type", using: :btree
 
   create_table "labels", force: :cascade do |t|
     t.string   "type"
@@ -130,8 +133,8 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.date     "published_at"
   end
 
-  add_index "labels", ["language"], name: "ix_labels_on_language"
-  add_index "labels", ["origin"], name: "ix_labels_on_origin"
+  add_index "labels", ["language"], name: "ix_labels_on_language", using: :btree
+  add_index "labels", ["origin"], name: "ix_labels_on_origin", using: :btree
 
   create_table "matches", force: :cascade do |t|
     t.integer  "concept_id"
@@ -141,8 +144,8 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.datetime "updated_at"
   end
 
-  add_index "matches", ["concept_id", "type"], name: "ix_matches_fk_type"
-  add_index "matches", ["type"], name: "ix_matches_on_type"
+  add_index "matches", ["concept_id", "type"], name: "ix_matches_fk_type", using: :btree
+  add_index "matches", ["type"], name: "ix_matches_on_type", using: :btree
 
   create_table "notations", force: :cascade do |t|
     t.integer "concept_id"
@@ -150,7 +153,7 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.string  "data_type",  limit: 4000
   end
 
-  add_index "notations", ["concept_id"], name: "index_notations_on_concept_id"
+  add_index "notations", ["concept_id"], name: "index_notations_on_concept_id", using: :btree
 
   create_table "note_annotations", force: :cascade do |t|
     t.integer  "note_id"
@@ -162,7 +165,7 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.string   "language"
   end
 
-  add_index "note_annotations", ["note_id"], name: "ix_note_annotations_fk"
+  add_index "note_annotations", ["note_id"], name: "ix_note_annotations_fk", using: :btree
 
   create_table "notes", force: :cascade do |t|
     t.string   "language",   limit: 2
@@ -174,9 +177,9 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.string   "owner_type",              null: false
   end
 
-  add_index "notes", ["language"], name: "ix_notes_on_language"
-  add_index "notes", ["owner_id", "owner_type", "type"], name: "ix_notes_fk_type"
-  add_index "notes", ["type"], name: "ix_notes_on_type"
+  add_index "notes", ["language"], name: "ix_notes_on_language", using: :btree
+  add_index "notes", ["owner_id", "owner_type", "type"], name: "ix_notes_fk_type", using: :btree
+  add_index "notes", ["type"], name: "ix_notes_on_type", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "forename"
@@ -194,4 +197,16 @@ ActiveRecord::Schema.define(version: 20141204151558) do
     t.string   "type",              default: "User"
   end
 
+  add_foreign_key "collection_members", "concepts", column: "collection_id", on_update: :cascade
+  add_foreign_key "collection_members", "concepts", column: "target_id", on_update: :cascade
+  add_foreign_key "concept_relations", "concepts", column: "owner_id", on_update: :cascade
+  add_foreign_key "concept_relations", "concepts", column: "target_id", on_update: :cascade
+  add_foreign_key "concepts", "users", column: "locked_by", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "exports", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "imports", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "labelings", "concepts", column: "owner_id", on_update: :cascade
+  add_foreign_key "labelings", "labels", column: "target_id", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "matches", "concepts", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "notations", "concepts", on_update: :cascade
+  add_foreign_key "note_annotations", "notes", on_update: :cascade, on_delete: :cascade
 end

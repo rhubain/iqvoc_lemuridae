@@ -2,12 +2,7 @@ source 'http://rubygems.org'
 
 gem 'iqvoc'
 
-# je commente sqlite car heroku ne l'accepte pas
-
-# gem 'sqlite3'
-group :development, :test do
-  gem 'sqlite3'
-end
-
+# je n'utilise plus sqlite car heroku n'en veut pas
+gem 'pg'
 
 gem "spring" # as requested by the command line comments
